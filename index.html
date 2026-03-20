@@ -506,7 +506,7 @@
       <button class="btn btn-primary" onclick="registarMembro()">Registar Membro</button>
 
       <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:1.5rem;padding-top:1.5rem">
-        <button class="btn btn-primary" onclick="contarJaSocio()" style="background:rgba(255,255,255,0.08);border:2px solid var(--arroz-blue);color:var(--arroz-blue);font-size:1rem;padding:0.9rem;letter-spacing:0.12em">+ Já Sócio &nbsp;<span id="ja-socio-count" style="opacity:0.7">0</span></button>
+        <button class="btn btn-primary" onclick="contarJaSocio()" style="background:rgba(255,255,255,0.08);border:2px solid var(--arroz-blue);color:var(--arroz-blue);font-size:1rem;padding:0.9rem;letter-spacing:0.12em">+ Já Sócio</button>
       </div>
 
     </div>
@@ -541,6 +541,10 @@
         <div class="stat-box">
           <div class="number" id="stat-diario">—</div>
           <div class="label">Diários Hoje</div>
+        </div>
+        <div class="stat-box">
+          <div class="number" id="stat-ja-socio">0</div>
+          <div class="label">Já Sócios</div>
         </div>
       </div>
 
@@ -606,6 +610,8 @@
   function _updateJaSocioDisplay() {
     const el = document.getElementById('ja-socio-count');
     if (el) el.textContent = _jaSocioCount;
+    const el2 = document.getElementById('stat-ja-socio');
+    if (el2) el2.textContent = _jaSocioCount;
   }
   function contarJaSocio() {
     _jaSocioCount++;
