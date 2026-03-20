@@ -611,10 +611,13 @@
     const el2 = document.getElementById('stat-ja-socio');
     if (el2) el2.textContent = _jaSocioCount;
   }
-  function contarJaSocio() {
+  async function contarJaSocio() {
     _jaSocioCount++;
     localStorage.setItem(_jaSocioKey, _jaSocioCount);
     _updateJaSocioDisplay();
+    try {
+      await db.from('contagens').upsert({data: todayStr(), ja_socios: _jaSocioCount}, {onConflict: 'data'});
+    } catch(e) { console.warn('contagens sync failed', e); }
   }
   _updateJaSocioDisplay();
 
