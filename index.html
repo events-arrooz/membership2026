@@ -505,6 +505,12 @@
             <div class="newsletter-check"><input type="checkbox" id="reg-newsletter"><span>Quero receber newsletters do Arroz Estudios / I want to receive newsletters from Arroz Estudios</span></div>
       <button class="btn btn-primary" onclick="registarMembro()">Registar Membro</button>
 
+      <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:1.5rem;padding-top:1.5rem">
+        <div style="text-align:center;margin-bottom:0.8rem;font-size:0.78rem;color:var(--text-light);letter-spacing:0.08em;text-transform:uppercase">Já Sócio</div>
+        <div id="ja-socio-count" style="text-align:center;font-size:2.5rem;font-weight:700;color:var(--arroz-blue);margin-bottom:0.8rem;letter-spacing:0.05em">0</div>
+        <button class="btn btn-primary" onclick="contarJaSocio()" style="background:rgba(255,255,255,0.08);border:2px solid var(--arroz-blue);color:var(--arroz-blue);font-size:1rem;padding:0.9rem;letter-spacing:0.12em">+ Já Sócio</button>
+      </div>
+
     </div>
   </div>
 
@@ -596,7 +602,21 @@
     document.getElementById('opt-diario').className = 'radio-option' + (tipo === 'diario' ? ' selected-diario' : '');
   }
 
-  function switchTab(tab) {
+  // Já Sócio counter (resets daily)
+  const _jaSocioKey = 'ja_socios_' + new Date().toISOString().slice(0,10);
+  let _jaSocioCount = parseInt(localStorage.getItem(_jaSocioKey) || '0');
+  function _updateJaSocioDisplay() {
+    const el = document.getElementById('ja-socio-count');
+    if (el) el.textContent = _jaSocioCount;
+  }
+  function contarJaSocio() {
+    _jaSocioCount++;
+    localStorage.setItem(_jaSocioKey, _jaSocioCount);
+    _updateJaSocioDisplay();
+  }
+  _updateJaSocioDisplay();
+
+    function switchTab(tab) {
     const tabs = ['registar', 'pesquisar', 'lista'];
     document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', tabs[i] === tab));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
