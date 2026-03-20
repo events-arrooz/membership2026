@@ -27,6 +27,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
+    padding-bottom: 90px;
     font-family: "Barlow", "Gill Sans", "Gill Sans MT", "Roboto", -apple-system, system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -505,9 +506,6 @@
             <div class="newsletter-check"><input type="checkbox" id="reg-newsletter"><span>Quero receber newsletters do Arroz Estudios / I want to receive newsletters from Arroz Estudios</span></div>
       <button class="btn btn-primary" onclick="registarMembro()">Registar Membro</button>
 
-      <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:1.5rem;padding-top:1.5rem">
-        <button class="btn btn-primary" onclick="contarJaSocio()" style="background:rgba(255,255,255,0.08);border:2px solid var(--arroz-blue);color:var(--arroz-blue);font-size:1rem;padding:0.9rem;letter-spacing:0.12em">+ Já Sócio</button>
-      </div>
 
     </div>
   </div>
@@ -781,5 +779,9 @@
 
   if(sessionStorage.getItem("arroz-auth")==="1"){init();}
 </script>
+
+<div style="position:fixed;bottom:0;left:0;right:0;padding:1rem 1.5rem;background:rgba(245,248,255,0.95);backdrop-filter:blur(8px);border-top:1.5px solid var(--border);z-index:500">
+  <button onclick="contarJaSocio()" style="width:100%;padding:1.1rem;font-size:1rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:transparent;border:2px solid var(--arroz-blue);color:var(--arroz-blue);border-radius:10px;cursor:pointer">+ Já Sócio</button>
+</div>
 </body>
 </html>
