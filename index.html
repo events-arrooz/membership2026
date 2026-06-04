@@ -602,24 +602,36 @@
     document.getElementById('opt-diario').className = 'radio-option' + (tipo === 'diario' ? ' selected-diario' : '');
   }
 
-  // Já Sócio counter (resets daily)
-  const _jaSocioKey = 'ja_socios_' + new Date().toISOString().slice(0,10);
-  let _jaSocioCount = parseInt(localStorage.getItem(_jaSocioKey) || '0');
+  // Já Sócio counter — synced via Supabase (multi-device safe)
+  let _jaSocioCount = 0;
   function _updateJaSocioDisplay() {
     const el = document.getElementById('ja-socio-count');
     if (el) el.textContent = _jaSocioCount;
     const el2 = document.getElementById('stat-ja-socio');
     if (el2) el2.textContent = _jaSocioCount;
   }
-  async function contarJaSocio() {
-    _jaSocioCount++;
-    localStorage.setItem(_jaSocioKey, _jaSocioCount);
-    _updateJaSocioDisplay();
+  async function _loadJaSocioFromDB() {
     try {
-      await db.from('contagens').upsert({data: todayStr(), ja_socios: _jaSocioCount}, {onConflict: 'data'});
-    } catch(e) { console.warn('contagens sync failed', e); }
+      const { data } = await db.from('contagens').select('ja_socios').eq('data', todayStr()).single();
+      _jaSocioCount = data?.ja_socios ?? 0;
+      _updateJaSocioDisplay();
+    } catch(e) { /* sem registo ainda hoje — fica em 0 */ }
   }
-  _updateJaSocioDisplay();
+  async function contarJaSocio() {
+    try {
+      // lê valor actual, soma 1, guarda — evita race conditions entre iPads
+      const { data } = await db.from('contagens').select('ja_socios').eq('data', todayStr()).single();
+      const novoTotal = (data?.ja_socios ?? 0) + 1;
+      await db.from('contagens').upsert({data: todayStr(), ja_socios: novoTotal}, {onConflict: 'data'});
+      _jaSocioCount = novoTotal;
+    } catch(e) {
+      _jaSocioCount++;
+      console.warn('contagens sync failed', e);
+    }
+    _updateJaSocioDisplay();
+  }
+  _loadJaSocioFromDB();
+  setInterval(_loadJaSocioFromDB, 30000);
 
     function switchTab(tab) {
     const tabs = ['registar', 'pesquisar', 'lista'];
