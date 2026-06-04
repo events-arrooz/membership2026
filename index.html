@@ -793,10 +793,27 @@
   }
 
   if(sessionStorage.getItem("arroz-auth")==="1"){init();}
+  function mostrarLocalStorage() {
+    const dados = Object.entries(localStorage)
+      .filter(([k]) => k.startsWith('ja_socios_'))
+      .sort(([a],[b]) => a.localeCompare(b))
+      .map(([k,v]) => k.replace('ja_socios_','') + ': ' + v)
+      .join('\n');
+    alert(dados || 'Sem dados de Já Sócio neste iPad');
+  }
 </script>
 
 <div style="position:fixed;bottom:0;left:0;right:0;padding:1rem 1.5rem;background:rgba(245,248,255,0.95);backdrop-filter:blur(8px);border-top:1.5px solid var(--border);z-index:500">
   <button onclick="contarJaSocio()" style="width:100%;padding:1.1rem;font-size:1rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;background:transparent;border:2px solid var(--arroz-blue);color:var(--arroz-blue);border-radius:10px;cursor:pointer">+ Já Sócio</button>
 </div>
+<div id="debug-btn" style="position:fixed;bottom:5rem;right:1rem;z-index:999;display:none">
+  <button onclick="mostrarLocalStorage()" style="padding:0.5rem 1rem;font-size:0.8rem;background:#333;color:#fff;border:none;border-radius:8px;opacity:0.7">Ver localStorage</button>
+</div>
+<script>
+  let _dbgTaps=0;
+  document.addEventListener('touchstart',function(e){
+    if(e.touches.length===3){_dbgTaps++;if(_dbgTaps>=3)document.getElementById('debug-btn').style.display='block';}
+  });
+</script>
 </body>
 </html>
